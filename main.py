@@ -3,9 +3,11 @@ import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 # Ensure settings are read
 from django.core.wsgi import get_wsgi_application
+from django.db.utils import IntegrityError
 application = get_wsgi_application()
 # Your application specific imports
 from User.models import *
+import json
 
 try:
     # Add user
@@ -19,12 +21,13 @@ try:
                 settings={"json": 123},
                 created_by="ADMIN")
     user.save()
-except Exception as e:
+except IntegrityError as e:
     print(e)
 
 # Application logic
 first_user = User.objects.all()[0]
-print(UserSerializer(first_user).data)
+data = UserSerializer(first_user).data
 
+print(data['name'])
 print(first_user.name)
 print(first_user.email)
