@@ -2,6 +2,7 @@ import sys
 try:
     from django.db import models
     from django.contrib.postgres.fields import JSONField
+    from rest_framework import serializers
     " https://docs.djangoproject.com/en/2.0/ref/contrib/postgres/fields/#jsonfield "
 except Exception as e:
     print("There was an error loading django modules. Do you have django installed?", e)
@@ -20,3 +21,12 @@ class User(models.Model):
     registered = models.DateTimeField(auto_now_add=True)
     settings = JSONField()
     created_by = models.CharField(max_length=255)
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    password = serializers.CharField(required=False)
+
+    class Meta:
+        model = User
+        fields = '__all__'
